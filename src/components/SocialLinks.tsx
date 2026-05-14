@@ -1,40 +1,29 @@
 import { useSocialLinks } from '../hooks/useSocialLinks'
 
-interface LinkButtonProps {
+interface LinkCardProps {
   href?: string
   icon: React.ReactNode
   label: string
   sublabel?: string
+  accentColor?: string
 }
 
-function LinkButton({ href, icon, label, sublabel }: LinkButtonProps) {
+function LinkCard({ href, icon, label, sublabel, accentColor = 'bg-brand-600' }: LinkCardProps) {
   if (!href) return null
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-4 rounded-2xl bg-white/10 px-5 py-4 text-white backdrop-blur-sm border border-white/10 transition hover:bg-white/20 hover:shadow-lg hover:border-gold-400/40"
+      className="group flex flex-col items-center gap-2 rounded-2xl bg-white px-5 py-5 text-center shadow-sm border border-brand-100 transition-all hover:shadow-md hover:-translate-y-1 hover:border-brand-300 flex-1 min-w-[110px]"
     >
-      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-brand-500/50 text-white border border-gold-400/30">
+      <span className={`flex h-12 w-12 items-center justify-center rounded-full text-white ${accentColor} shadow-sm group-hover:scale-110 transition-transform`}>
         {icon}
       </span>
-      <div className="text-left">
-        <p className="font-semibold leading-tight">{label}</p>
-        {sublabel && <p className="text-sm text-brand-200">{sublabel}</p>}
+      <div>
+        <p className="text-sm font-bold text-brand-800 leading-tight">{label}</p>
+        {sublabel && <p className="text-xs text-brand-400 mt-0.5">{sublabel}</p>}
       </div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="ml-auto h-5 w-5 text-gold-400/70"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fillRule="evenodd"
-          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-          clipRule="evenodd"
-        />
-      </svg>
     </a>
   )
 }
@@ -69,33 +58,55 @@ export default function SocialLinks() {
   if (!hasAny) return null
 
   return (
-    <section className="bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 py-16 px-6">
-      <div className="mx-auto max-w-xl">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-white">Temukan Kami Di</h2>
-          {/* Garis emas dekoratif */}
-          <div className="mx-auto mt-3 mb-4 flex items-center justify-center gap-3">
-            <div className="h-px w-10 bg-gold-400 opacity-60" />
-            <span className="text-gold-400 text-xs uppercase tracking-widest font-semibold">X.Clusive Gift</span>
-            <div className="h-px w-10 bg-gold-400 opacity-60" />
+    <section className="bg-brand-50/60 border-y border-brand-100 py-10 px-6">
+      <div className="mx-auto max-w-3xl">
+        {/* Heading compact */}
+        <div className="mb-6 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-brand-700 px-4 py-1 mb-3">
+            <span className="text-gold-400 text-xs">✦</span>
+            <span className="text-white text-xs font-semibold uppercase tracking-widest">Temukan Kami Di</span>
+            <span className="text-gold-400 text-xs">✦</span>
           </div>
-          <p className="text-brand-200">
-            Belanja online atau hubungi admin untuk pemesanan khusus
-          </p>
+          <p className="text-sm text-brand-500">Belanja online atau hubungi admin untuk pemesanan khusus</p>
         </div>
 
-        <div className="flex flex-col gap-3">
+        {/* Cards horizontal */}
+        <div className="flex flex-wrap justify-center gap-3">
           {links.shopee && (
-            <LinkButton href={links.shopee} icon={<ShopeeIcon />} label="Shopee" sublabel="Belanja di Shopee" />
+            <LinkCard
+              href={links.shopee}
+              icon={<ShopeeIcon />}
+              label="Shopee"
+              sublabel="Belanja online"
+              accentColor="bg-orange-500"
+            />
           )}
           {links.sidePart && (
-            <LinkButton href={links.sidePart} icon={<PackageIcon />} label="Side Part" sublabel="X.Clusive_Seserahan" />
+            <LinkCard
+              href={links.sidePart}
+              icon={<PackageIcon />}
+              label="Side Part"
+              sublabel="Seserahan"
+              accentColor="bg-brand-600"
+            />
           )}
           {links.admin1 && (
-            <LinkButton href={links.admin1} icon={<MessageIcon />} label="Booking Admin 1" sublabel="Chat via WhatsApp" />
+            <LinkCard
+              href={links.admin1}
+              icon={<MessageIcon />}
+              label="Admin 1"
+              sublabel="WhatsApp"
+              accentColor="bg-green-600"
+            />
           )}
           {links.admin2 && (
-            <LinkButton href={links.admin2} icon={<PhoneIcon />} label="Booking Admin 2" sublabel="Chat via WhatsApp" />
+            <LinkCard
+              href={links.admin2}
+              icon={<PhoneIcon />}
+              label="Admin 2"
+              sublabel="WhatsApp"
+              accentColor="bg-green-700"
+            />
           )}
         </div>
       </div>
