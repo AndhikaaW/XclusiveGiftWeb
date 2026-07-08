@@ -1,7 +1,15 @@
+import { useState } from 'react'
 import { useShowcaseItems } from '../hooks/useShowcaseItems'
+import { useCategories } from '../hooks/useCategories'
 
 export default function ProductShowcase() {
   const { items, loading, error } = useShowcaseItems()
+  const { categories } = useCategories()
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  const filteredItems = selectedCategory
+    ? items.filter((item) => item.category === selectedCategory)
+    : items
 
   return (
     <section id="showcase" className="bg-white py-16 px-6">
@@ -36,6 +44,35 @@ export default function ProductShowcase() {
           </div>
         )}
 
+        {/* Filter Kategori */}
+        {!loading && !error && items.length > 0 && (
+          <div className="mb-8 flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                selectedCategory === null
+                  ? 'bg-brand-800 text-white'
+                  : 'bg-brand-100 text-brand-700 hover:bg-brand-200'
+              }`}
+            >
+              Semua
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.nama)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                  selectedCategory === cat.nama
+                    ? 'bg-brand-800 text-white'
+                    : 'bg-brand-100 text-brand-700 hover:bg-brand-200'
+                }`}
+              >
+                {cat.nama}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Kosong */}
         {!loading && !error && items.length === 0 && (
           <div className="mx-auto max-w-sm rounded-xl border border-brand-100 bg-brand-50 px-6 py-12 text-center">
@@ -49,9 +86,17 @@ export default function ProductShowcase() {
           </div>
         )}
 
+        {/* Kosong setelah filter */}
+        {!loading && !error && items.length > 0 && filteredItems.length === 0 && (
+          <div className="mx-auto max-w-sm rounded-xl border border-brand-100 bg-brand-50 px-6 py-12 text-center">
+            <p className="text-brand-700 font-medium">Tidak ada produk di kategori ini.</p>
+            <p className="mt-1 text-sm text-brand-500">Coba pilih kategori lain.</p>
+          </div>
+        )}
+
         {/* Grid produk */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <div
               key={item.id}
               className="group overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-sm transition hover:shadow-lg hover:-translate-y-1"
